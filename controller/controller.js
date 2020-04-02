@@ -15,7 +15,7 @@ class Controller {
                         data = result[i]
                     }
                 }
-                return res.status(200).json(data)
+                return res.status(200).json(result.data)
             })
             .catch(function(err) {
                 return res.status(400).json({
@@ -31,7 +31,7 @@ class Controller {
             method:"GET"
         })
             .then(function(result) {   
-                return res.status(200).json(result.respon)
+                return res.status(200).json(result.data.respon)
             })
             .catch(function(err) {
                 return res.status(400).json({

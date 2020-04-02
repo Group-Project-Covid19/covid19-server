@@ -14,8 +14,7 @@ router.post('/register', UserController.register);
 router.post('/googleSignIn', UserController.googleSign);
 
 //object yg digunakan {email, password}
-router.post("/login", UserController.Login);
-router.post("/register", UserController.Register);
-router.post('/data', Controller.GetData)
+router.get('/data', Controller.GetData);
+router.get('/weather', Controller.weather);
 
 module.exports = router

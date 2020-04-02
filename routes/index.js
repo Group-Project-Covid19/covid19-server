@@ -17,6 +17,6 @@ router.get('/weather', Controller.weather);
 
 router.post("/login", UserController.login);
 router.post("/register", UserController.register);
-router.post('/googleSignIn', UserController.googleSign);
+router.post("/googleSignIn", UserController.googleSign);
 
 module.exports = router

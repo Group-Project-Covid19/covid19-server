@@ -51,65 +51,62 @@ class UserController {
 
     static googleSign(req,res,next){
         const client = new OAuth2Client(process.env.CLIENT_ID);
-        let email =''
+        let email;
         client.verifyIdToken({
-            idToken:req.body.id_token,
-            audience:process.env.CLIENT_ID
+            idToken : req.body.id_token,
+            audience : process.env.CLIENT_ID
         })
-
-        .then(ticket =>{
-            email = ticket.getPayload().email
+        .then(result => {
+            email = result.payload.email
 
             return User.findOne({
-                where: {
-                    email
-                }
+                where : { email }
             })
-            .then(data=>{
-                if(data){                
-                let user = {                    
-                    id : data.id,
-                    email: data.email                    
-                    }                   
-                    let token = generateToken(user)
-                    res.status(200).json({
-                        msg:'Succes find user',
-                        Data:{
-                            'id':user.id,
-                            'email':user.email,
-                            'accessToken': token 
-                        }
-                    })
-                 } else {
-                   return User.create({
-                        email,
-                        password:"default_google"
-                    })                    
-                 }
-            })
-            
-            .then(result =>{
-                let user = {
-                    id:result.id,
-                    email:email
-                }
-                let token = generateToken(user)
-                res.status(201).json({
-                    msg:'Succes Create User',
-                    Data:{
-                        'id':user.id,
-                        'email':user.email,
-                        'accessToken': token 
+            .then(data => {
+                if (data){
+                    
+                    let user = {
+                        id : data.id,
+                        email : data.email,
                     }
-                })
-            })
-            .catch(err=>{
-                res.status(500).json({
-                    'msg':"Internal Server Error",
-                    'error':err
-                })
-            })
 
+                    let token = getToken(user)
+
+                    res.status(200).json({
+                        message : 'login success !!',
+                        'id' : user.id,
+                        'email' : user.email,
+                        'accessToken' : token
+                    })
+                } else {
+                    let newUser = {
+                        email : result.payload.email,
+                        password : 'default_google'
+                    }
+
+                    return User.create(newUser)
+                    .then(data => {
+
+                        let user =  {
+                            id : data.id,
+                            email : data.email
+                        }
+            
+                        let token = getToken(user);
+            
+                        res.status(201).json({
+                            message : 'success add user !!',
+                            'id' : data.id,
+                            'email' : data.email,
+                            'accessToken' : token
+                        })
+
+                    })
+                    .catch(err => {
+                        next(err)
+                    })
+                }
+            })   
         })
 
     }

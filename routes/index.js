@@ -9,7 +9,9 @@ router.get('/', function(req, res) {
     })
 }) 
 
-router.get('/main', )
+router.post('/login', UserController.login);
+router.post('/register', UserController.register);
+router.post('/googleSignIn', UserController.googleSign);
 
 //object yg digunakan {email, password}
 router.post("/login", UserController.Login);

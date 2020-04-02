@@ -23,6 +23,22 @@ class Controller {
                 })
             })
     }
+
+    static weather(req, res)
+    {
+        Axios({
+            url: `https://rest.farzain.com/api/cuaca.php?id=jakarta&apikey=${process.env.WeatherApiKey}`,
+            method:"GET"
+        })
+            .then(function(result) {   
+                return res.status(200).json(result.respon)
+            })
+            .catch(function(err) {
+                return res.status(400).json({
+                    error: "Bad Request"
+                })
+            })
+    }
 }
 
 module.exports = Controller

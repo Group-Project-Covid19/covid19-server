@@ -9,13 +9,12 @@ router.get('/', function(req, res) {
     })
 }) 
 
-router.post('/login', UserController.login);
-router.post('/register', UserController.register);
-router.post('/googleSignIn', UserController.googleSign);
+
 
 //object yg digunakan {email, password}
 router.post("/login", UserController.Login);
 router.post("/register", UserController.Register);
-router.post('/data', Controller.GetData)
+router.get('/data', Controller.GetData)
+router.post('/googleSignIn', UserController.googleSign);
 
 module.exports = router

@@ -11,4 +11,8 @@ router.get('/', function(req, res) {
 
 router.get('/main', )
 
+//object yg digunakan {email, password}
+router.post("/login", UserController.Login);
+router.post("/register", UserController.Register);
+
 module.exports = router

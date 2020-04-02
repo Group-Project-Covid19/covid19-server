@@ -77,7 +77,7 @@ class UserController {
                         Data:{
                             'id':user.id,
                             'email':user.email,
-                            'token': token 
+                            'accessToken': token 
                         }
                     })
                  } else {
@@ -99,7 +99,7 @@ class UserController {
                     Data:{
                         'id':user.id,
                         'email':user.email,
-                        'token': token 
+                        'accessToken': token 
                     }
                 })
             })

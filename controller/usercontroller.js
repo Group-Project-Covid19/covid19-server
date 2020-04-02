@@ -47,6 +47,71 @@ class UserController {
     static GoogleLogin(req, res) {
         
     }
+
+    static googleSign(req,res,next){
+        const client = new OAuth2Client(process.env.CLIENT_ID);
+        let email =''
+        client.verifyIdToken({
+            idToken:req.body.id_token,
+            audience:process.env.CLIENT_ID
+        })
+
+        .then(ticket =>{
+            email = ticket.getPayload().email
+
+            return User.findOne({
+                where: {
+                    email
+                }
+            })
+            .then(data=>{
+                if(data){                
+                let user = {                    
+                    id : data.id,
+                    email: data.email                    
+                    }                   
+                    let token = generateToken(user)
+                    res.status(200).json({
+                        msg:'Succes find user',
+                        Data:{
+                            'id':user.id,
+                            'email':user.email,
+                            'token': token 
+                        }
+                    })
+                 } else {
+                   return User.create({
+                        email,
+                        password:"default_google"
+                    })                    
+                 }
+            })
+            
+            .then(result =>{
+                let user = {
+                    id:result.id,
+                    email:email
+                }
+                let token = generateToken(user)
+                res.status(201).json({
+                    msg:'Succes Create User',
+                    Data:{
+                        'id':user.id,
+                        'email':user.email,
+                        'token': token 
+                    }
+                })
+            })
+            .catch(err=>{
+                res.status(500).json({
+                    'msg':"Internal Server Error",
+                    'error':err
+                })
+            })
+
+        })
+
+    }
 }
 
 module.exports = UserController

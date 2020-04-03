@@ -34,10 +34,10 @@ class UserController {
         .then(data =>
         {
             if(!data)
-                return res.status(401).json({error : "Invalid email / password ahay"});
+                return res.status(401).json({error : "Invalid email / password"});
         
             if(!decrypt(password, data.password))
-                return res.status(401).json({error : "Invalid email / password uhuy"});
+                return res.status(401).json({error : "Invalid email / password"});
             
             token = getToken(data.dataValues.id);
             return axios({
@@ -69,7 +69,7 @@ class UserController {
         .catch(err => 
         {
             console.log(err)
-            res.status(400).json({error : "Bad Request ahay"});
+            res.status(400).json({error : "Bad Request"});
         })
     }
     
@@ -102,13 +102,6 @@ class UserController {
                     }
 
                     token = getToken(user)
-
-                    // res.status(200).json({
-                    //     message : 'login success !!',
-                    //     'id' : user.id,
-                    //     'email' : user.email,
-                    //     'accessToken' : token
-                    // })
                     return axios({
                         url : 'https://freegeoip.app/json/',
                         method: "GET"

@@ -2,6 +2,7 @@ const {User} = require("../models");
 const {getToken} = require("../helpers/jwt");
 const {decrypt} = require("../helpers/bcrypt");
 const {OAuth2Client} = require('google-auth-library');
+const axios = require('axios')
 
 class UserController {
 
@@ -25,23 +26,50 @@ class UserController {
     static login(req, res) 
     {
         let {email, password} = req.body;
+        let token;
+        let ip;
+        let covidCountry = []
 
         User.findOne({where : {email}})
         .then(data =>
         {
             if(!data)
-                return res.status(401).json({error : "Invalid email / password"});
+                return res.status(401).json({error : "Invalid email / password ahay"});
         
             if(!decrypt(password, data.password))
-                return res.status(401).json({error : "Invalid email / password"});
+                return res.status(401).json({error : "Invalid email / password uhuy"});
             
-            let token = getToken(data.dataValues.id);
-            req.headers.token = token;
-            return res.status(200).json({accessToken : token});
+            token = getToken(data.dataValues.id);
+            return axios({
+                url : 'https://freegeoip.app/json/',
+                method: "GET"
+            })
         })
-        .catch(() => 
+        .then(result => {
+            ip = result.data
+            return axios({
+                url: 'https://api.covid19api.com/summary',
+                method: 'GET'
+            })
+        })
+        .then(result => {
+            // console.log(result)
+            for(let i = 0; i < result.data.Countries.length; i++) {
+                if(result.data.Countries[i].Country == ip.country_name) {
+                    covidCountry.push(result.data.Countries[i])
+                }
+            }
+            console.log(covidCountry)
+            return res.status(200).json({
+                accessToken: token,
+                ip,
+                covidCountry
+            })
+        })
+        .catch(err => 
         {
-            res.status(400).json({error : "Bad Request"});
+            console.log(err)
+            res.status(400).json({error : "Bad Request ahay"});
         })
     }
     

@@ -37,11 +37,14 @@ class Controller {
                 .then(function(countryCode) {
                     for (let i = 0; i < result.data.length; i++ ){
                         for ( let j = 0; j < countryCode.data.length; j++){
-
+                            
                            if ( result.data[i].attributes.Country_Region == countryCode.data[j].name){
-                                result.data[i].attributes['code'] = countryCode.data[j].altSpellings[0]
-                                break;
-                           }  
+                                    result.data[i].attributes['code'] = countryCode.data[j].altSpellings[0]
+                                     break;
+                           } else if (result.data[i].attributes.Country_Region == 'US'){
+                                    result.data[i].attributes['code'] = 'US'
+                                    break;
+                            } 
                         }
                     }
                     return res.status(200).json(result.data)

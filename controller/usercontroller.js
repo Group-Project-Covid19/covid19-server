@@ -80,6 +80,9 @@ class UserController {
     static googleSign(req,res,next){
         const client = new OAuth2Client(process.env.CLIENT_ID);
         let email;
+        let ip;
+        let covidCountry = []
+        let token;
         client.verifyIdToken({
             idToken : req.body.id_token,
             audience : process.env.CLIENT_ID
@@ -98,13 +101,37 @@ class UserController {
                         email : data.email,
                     }
 
-                    let token = getToken(user)
+                    token = getToken(user)
 
-                    res.status(200).json({
-                        message : 'login success !!',
-                        'id' : user.id,
-                        'email' : user.email,
-                        'accessToken' : token
+                    // res.status(200).json({
+                    //     message : 'login success !!',
+                    //     'id' : user.id,
+                    //     'email' : user.email,
+                    //     'accessToken' : token
+                    // })
+                    return axios({
+                        url : 'https://freegeoip.app/json/',
+                        method: "GET"
+                    })
+                    .then(result => {
+                        ip = result.data
+                        return axios({
+                            url: 'https://api.covid19api.com/summary',
+                            method: 'GET'
+                        })
+                    })
+                    .then(result => {
+                        for(let i = 0; i < result.data.Countries.length; i++) {
+                            if(result.data.Countries[i].Country == ip.country_name) {
+                                covidCountry.push(result.data.Countries[i])
+                            }
+                        }
+                        console.log(covidCountry)
+                        return res.status(200).json({
+                            accessToken: token,
+                            ip,
+                            covidCountry
+                        })
                     })
                 } else {
                     let newUser = {
@@ -120,7 +147,7 @@ class UserController {
                             email : data.email
                         }
             
-                        let token = getToken(user);
+                        token = getToken(user);
             
                         res.status(201).json({
                             message : 'success add user !!',

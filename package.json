@@ -1,0 +1,31 @@
+{
+  "name": "covid19-server",
+  "version": "1.0.0",
+  "description": "This for server only",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "SET NODE_ENV=development&&nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Group-Project-Covid19/covid19-server.git"
+  },
+  "author": "Yoko,Guntoro,Muhrian,Inggar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Group-Project-Covid19/covid19-server/issues"
+  },
+  "homepage": "https://github.com/Group-Project-Covid19/covid19-server#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "google-auth-library": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.0.0",
+    "sequelize": "^5.21.5"
+  }
+}

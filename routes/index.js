@@ -13,6 +13,7 @@ router.get('/', function(req, res) {
 
 //object yg digunakan {email, password}
 router.get('/data', Controller.GetData);
+router.get('/dataByCountry', Controller.GetDataByCountry);
 router.get('/weather', Controller.weather);
 
 router.post("/login", UserController.login);
